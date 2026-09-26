@@ -1,0 +1,1192 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./shadcn.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: light !important;
+  /* Motion vocabulary — one strong ease-out for UI enters, the iOS drawer
+     curve for slide-over panels. Built-in CSS easings are too weak. */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  /* 원래 앱 배경(#fafafa)을 지킨다 — shadcn init 이 순백으로 바꿔 놓은 것을 복원. */
+  --background: #fafafa;
+  --foreground: #171717;
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --surface-1: #FAFAFA;
+  --surface-2: #FCFCFC;
+  --surface-3: #FFFFFF;
+  --surface-4: #FFFFFF;
+  --surface-5: #FFFFFF;
+  --surface-6: #FFFFFF;
+  --surface-7: #FFFFFF;
+  --surface-8: #FFFFFF;
+  --shadow-color: rgb(0 0 0 / 0.06);
+  --shadow-1: 0 0 0 1px var(--shadow-color);
+  --shadow-2: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color);
+  --shadow-3: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color);
+  --shadow-4: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color);
+  --shadow-5: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color);
+  --shadow-6: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color), 0 24px 24px -12px var(--shadow-color);
+  --shadow-7: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color), 0 24px 24px -12px var(--shadow-color), 0 48px 48px -24px var(--shadow-color);
+  --shadow-8: 0 0 0 1px var(--shadow-color), 0 1px 1px -0.5px var(--shadow-color), 0 3px 3px -1.5px var(--shadow-color), 0 6px 6px -3px var(--shadow-color), 0 12px 12px -6px var(--shadow-color), 0 24px 24px -12px var(--shadow-color), 0 48px 48px -24px var(--shadow-color), 0 96px 96px -48px var(--shadow-color);
+}
+
+@media print {
+  .video-note-toolbar,
+  .video-note-reader > div > aside {
+    display: none !important;
+  }
+  .video-note-reader,
+  .video-note-reader > div,
+  .video-note-reader main {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+    background: white !important;
+  }
+  .video-note-reader article {
+    max-width: 190mm !important;
+    padding: 8mm 0 !important;
+  }
+  .video-note-reader section,
+  .video-note-reader figure {
+    break-inside: avoid;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Geist Sans for the UI, Geist Mono for numbers/IDs — siblings, so sans and
+     mono share one designed family. Hangul falls back to Apple SD Gothic Neo
+     (then Pretendard if present) so Korean reads as intentional, not random
+     system text. */
+  --font-sans: var(--font-geist-sans), "Geist", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* OCMD brand palette — used by the 답변 노트 편지 (answer letter) only, where a
+     branded, shareable artifact is wanted. The rest of the dashboard stays
+     neutral per the house rules. PURPLE 2715 C / BLACK 3 C / PAPER. */
+  --color-brand: #8982d0;
+  --color-brand-deep: #6f67c4;
+  --color-brand-soft: #9b94db;
+  --color-brand-ink: #111111;
+  --color-brand-paper: #ededed;
+
+  /* 카드 표면 그림자 → shadow-card 유틸. near(1px)+ambient(12px) 2겹.
+     콘텐츠 작업대(/workbench)의 카드가 참조한다. */
+  --shadow-card: 0 1px 2px rgba(10, 10, 10, 0.04), 0 4px 12px -2px rgba(10, 10, 10, 0.06);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-4: var(--surface-4);
+  --color-surface-5: var(--surface-5);
+  --color-surface-6: var(--surface-6);
+  --color-surface-7: var(--surface-7);
+  --color-surface-8: var(--surface-8);
+  --shadow-surface-1: var(--shadow-1);
+  --shadow-surface-2: var(--shadow-2);
+  --shadow-surface-3: var(--shadow-3);
+  --shadow-surface-4: var(--shadow-4);
+  --shadow-surface-5: var(--shadow-5);
+  --shadow-surface-6: var(--shadow-6);
+  --shadow-surface-7: var(--shadow-7);
+  --shadow-surface-8: var(--shadow-8);
+  --color-dm-drop: var(--dm-drop);
+  --color-dm-ring-high: var(--dm-ring-high);
+  --color-dm-ring-mid: var(--dm-ring-mid);
+  --color-dm-ring-base: var(--dm-ring-base);
+  --color-dm-hi-peak: var(--dm-hi-peak);
+  --color-dm-hi-high: var(--dm-hi-high);
+  --color-dm-hi-mid: var(--dm-hi-mid);
+  --color-dm-hi-base: var(--dm-hi-base);
+  --shadow-8: var(--shadow-8);
+  --shadow-7: var(--shadow-7);
+  --shadow-6: var(--shadow-6);
+  --shadow-5: var(--shadow-5);
+  --shadow-4: var(--shadow-4);
+  --shadow-3: var(--shadow-3);
+  --shadow-2: var(--shadow-2);
+  --shadow-1: var(--shadow-1);
+  --color-shadow-color: var(--shadow-color);
+  @keyframes spinner-move {
+  to {
+    stroke-dashoffset: -100;
+    }
+  }
+  @keyframes spinner-dash {
+  0%, 100% {
+    stroke-dasharray: 15 85;
+    }
+  50% {
+    stroke-dasharray: 40 60;
+    }
+  }
+  @keyframes shimmer {
+  0% {
+    background-position: 0% 0;
+    }
+  100% {
+    background-position: 100% 0;
+    }
+  }
+}
+
+html,
+html * {
+  color-scheme: light !important;
+}
+
+body {
+  /* next/font emits --font-geist-sans on <html>; the @theme inline block does
+     NOT expose --font-sans as a :root variable, so reference the raw var here. */
+  font-family: var(--font-geist-sans), "Geist", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Compact, dense dashboard baseline. Most UI text sits at 13px. */
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: -0.006em;
+  font-feature-settings: "liga" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Force light color scheme on all elements to override system dark mode */
+*,
+*::before,
+*::after {
+  border-color: inherit;
+}
+
+input,
+textarea,
+select,
+button {
+  color-scheme: light !important;
+}
+
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="date"],
+input[type="datetime-local"] {
+  background-color: #ffffff;
+  color: #171717;
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: #a3a3a3;
+}
+
+/* Touch ergonomics. Remove the grey tap flash and the legacy 300ms click
+   delay so taps feel native; this is global so every button/link benefits. */
+button,
+a,
+label,
+summary,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* iOS Safari auto-zooms the page when a focused field's text is < 16px. The
+   dashboard runs at 13–14px, which trips it on every input. Force 16px on
+   phones only so focusing a field never yanks the viewport. */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+@keyframes checkmark {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.todo-checked {
+  animation: checkmark 0.15s ease-out;
+}
+
+/* 접혀 있다가 펼쳐지며 드러나는 행 — "더 보기"류 확장에만 쓴다.
+   페이지 로드 시 항상 보이는 행에는 붙이지 말 것 (로드 애니메이션 금지). */
+@keyframes row-enter {
+  from { opacity: 0; transform: translateY(-2px); }
+}
+
+.row-enter {
+  animation: row-enter 150ms var(--ease-out-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-enter { animation: none; }
+}
+
+/* 카드 둘레를 도는 빛 한 조각 — "이 표면이 지금 생성 중"이라는 신호.
+   콘텐츠 작업대(/workbench)의 border-beam.tsx 가 쓴다. offset-distance 만
+   쓰는 순수 CSS라 JS 런타임이 필요 없다. */
+@keyframes border-beam {
+  to { offset-distance: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .border-beam-seg { animation: none; opacity: 0; }
+}
+
+/* ================================================================== *
+ * Design system — "Quiet Light"
+ * A calm, near-monochrome, compact light UI. Blends the neutral
+ * marketing system (white surfaces, near-black action color, soft
+ * ring edges) with Quiet Dark's restraint (flat, hairline separation,
+ * regular weight, one accent at a time) — applied on white.
+ *
+ * Rules of the house (see CLAUDE.md, do not break):
+ *  - Edges/containers use ring-1 ring-neutral-950/5, never `border`.
+ *  - Dividers are 1px box-shadows, never `border` / `divide-*`.
+ *  - Icons are Heroicons /micro at size-4 (16px).
+ *  - Color stays neutral. Accents are semantic only and twisted off the
+ *    obvious: emerald (positive/active), rose (danger), amber (warning).
+ *    One accent at a time; the interface itself stays gray.
+ * ================================================================== */
+@layer components {
+  /* --- Typography ------------------------------------------------- */
+
+  /* Section label: Geist Mono, uppercase, wide tracking. Reads as designed. */
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.12em] text-neutral-400;
+    font-weight: 500;
+  }
+
+  /* Inline muted label for stats, fields, table headers. */
+  .label {
+    @apply text-xs text-neutral-500;
+  }
+
+  /* Display/heading weight sits at 560 — between medium and semibold.
+     Tighten tracking on larger text. */
+  .text-display {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .text-heading {
+    font-weight: 500;
+    letter-spacing: -0.012em;
+  }
+
+  /* Tabular figures so numbers/stats align. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Korean serif (명조) for the 답변 노트 essay — hero title, pull-quote, body.
+     Loaded via CDN <link> in layout. Falls back to system serif gracefully. */
+  .font-myeongjo {
+    font-family: "Nanum Myeongjo", "Apple SD Gothic Neo", "Batang", serif;
+    letter-spacing: -0.01em;
+  }
+  /* Nanum Gothic — backs the Brunch font menu's 나눔고딕 / 나눔바른고딕. */
+  .font-gothic {
+    font-family: "Nanum Gothic", "Apple SD Gothic Neo", sans-serif;
+  }
+
+  /* Rendered / edited 편지 본문 (rich HTML). Used for both the read-only letter
+     (dangerouslySetInnerHTML, sanitized on save) and the contentEditable editor,
+     so what you edit matches what readers see. */
+  .letter-body {
+    word-break: keep-all;
+  }
+  .letter-body p {
+    margin: 0 0 1.35em;
+    line-height: 1.95;
+  }
+  .letter-body p:last-child {
+    margin-bottom: 0;
+  }
+  .letter-body blockquote {
+    margin: 1.4em 0;
+    padding: 0.2em 0 0.2em 1em;
+    box-shadow: inset 3px 0 0 0 var(--color-brand);
+    color: #57534e;
+    font-style: italic;
+  }
+  .letter-body ul,
+  .letter-body ol {
+    margin: 1.1em 0;
+    padding-left: 1.35em;
+  }
+  .letter-body ul {
+    list-style: disc;
+  }
+  .letter-body ol {
+    list-style: decimal;
+  }
+  .letter-body li {
+    margin: 0.35em 0;
+  }
+  .letter-body a {
+    color: var(--color-brand-deep);
+    text-decoration: underline;
+  }
+  .letter-body strong,
+  .letter-body b {
+    font-weight: 700;
+  }
+  .letter-body u {
+    text-decoration: underline;
+  }
+  .letter-body s,
+  .letter-body strike,
+  .letter-body del {
+    text-decoration: line-through;
+  }
+
+  /* Placeholder for empty contentEditable fields (Brunch-style). */
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: currentColor;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* --- Surfaces -------------------------------------------------- */
+
+  /* Standard container: white, soft ring edge, no border. */
+  .card {
+    @apply rounded-xl bg-white ring-1 ring-neutral-950/5;
+  }
+
+  /* Soft fill behind a figure/screenshot — makes it pop without a border. */
+  .well {
+    @apply rounded-xl bg-neutral-950/5;
+  }
+
+  /* --- Buttons (pills, sized by padding, never a fixed height) ---- */
+
+  /* Buttons match the app's native thin style: text-xs, regular weight, pill.
+     Hierarchy comes from fill + color, not from heavier type. */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full whitespace-nowrap bg-brand-ink px-3.5 py-1.5 text-xs text-white transition-colors hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full whitespace-nowrap bg-white px-3.5 py-1.5 text-xs text-neutral-600 ring-1 ring-neutral-950/10 transition-colors hover:bg-neutral-50 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  /* Quiet text/icon button: no fill until hover. For inline/secondary actions. */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full whitespace-nowrap px-3 py-1.5 text-xs text-neutral-500 transition-colors hover:bg-neutral-950/5 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  /* OCMD brand accent pill (purple #8982D0) — same shape as btn-primary. For
+     primary brand actions (AI generate, save, share, 현재). */
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full whitespace-nowrap bg-brand px-3.5 py-1.5 text-xs text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  /* Smaller pill (nav / inline actions). */
+  .btn-sm {
+    @apply gap-1 px-2.5 py-1 text-[11px];
+  }
+
+  /* --- Inputs ---------------------------------------------------- */
+
+  .input {
+    @apply h-8 w-full rounded-lg bg-white px-3 text-sm text-neutral-900 ring-1 ring-neutral-950/10 transition placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-950/15;
+  }
+
+  /* --- Badges (subtle fill, no border, lowercase by usage) ------- */
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full bg-neutral-950/[0.05] px-2 py-0.5 text-[11px] font-medium text-neutral-600;
+  }
+  .badge-positive { @apply bg-emerald-500/10 text-emerald-700; }
+  .badge-warning  { @apply bg-amber-500/10 text-amber-700; }
+  .badge-danger   { @apply bg-rose-500/10 text-rose-700; }
+
+  /* --- Status dot (one consistent physical size across the app) --- */
+
+  .dot {
+    @apply inline-block size-1.5 shrink-0 rounded-full;
+  }
+  .dot-positive { @apply bg-emerald-500; }
+  .dot-warning  { @apply bg-amber-400; }
+  .dot-danger   { @apply bg-rose-500; }
+  .dot-muted    { @apply bg-neutral-300; }
+
+  /* --- Segmented control (pill track hugs the active pill) -------- */
+
+  .seg {
+    @apply inline-flex items-center gap-0.5 rounded-full bg-neutral-950/5 p-0.5;
+  }
+  .seg-item {
+    @apply rounded-full whitespace-nowrap px-3 py-1 text-xs text-neutral-500 transition-colors hover:text-neutral-800;
+  }
+  .seg-item-active {
+    @apply bg-white text-neutral-900 shadow-[0_1px_2px_rgba(10,10,10,0.08)];
+  }
+  /* 활성 알약이 형제 사이를 미끄러지는 변형 (motion 의 ActivePill 이 얹는다).
+     알약이 절대 위치라 라벨은 .seg-label 로 그 위에 올린다. */
+  .seg-pill {
+    @apply rounded-full bg-white shadow-[0_1px_2px_rgba(10,10,10,0.08)];
+  }
+  .seg-label {
+    @apply relative z-10;
+  }
+
+  /* --- Press feedback --------------------------------------------- */
+
+  /* Every pill button confirms the press the instant the pointer goes down.
+     transform joins the color transition; 0.96 is the house scale — smaller
+     reads as exaggerated. */
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-accent,
+  .seg-item {
+    transition-property: color, background-color, transform;
+    transition-duration: 150ms;
+    transition-timing-function: var(--ease-out-strong);
+  }
+  .btn-primary:active:not(:disabled),
+  .btn-secondary:active:not(:disabled),
+  .btn-ghost:active:not(:disabled),
+  .btn-accent:active:not(:disabled),
+  .seg-item:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  /* --- Enter/exit animations (slide-overs, scrims, dropdown menus) - */
+
+  /* Scrim behind a slide-over: a light dim only — the content behind must
+     stay readable (2026-08-05 결정: 블러 금지). data-state="closing" plays
+     the exit before the SlideOver component unmounts. */
+  .overlay-fade {
+    transition: opacity 250ms var(--ease-out-strong);
+    @starting-style {
+      opacity: 0;
+    }
+  }
+  .overlay-fade[data-state="closing"] {
+    opacity: 0;
+    transition-duration: 150ms;
+  }
+
+  /* Right-edge slide-over panel — '재질(materialize)' 모션. 거의 이동하지
+     않고 블러가 걷히며 도착(250ms), 퇴장은 더 빠르게(180ms). */
+  .panel-material {
+    transition:
+      transform 250ms var(--ease-out-strong),
+      opacity 250ms var(--ease-out-strong),
+      filter 250ms var(--ease-out-strong);
+    @starting-style {
+      opacity: 0;
+      transform: translateX(24px) scale(0.98);
+      filter: blur(8px);
+    }
+  }
+  .panel-material[data-state="closing"] {
+    opacity: 0;
+    transform: translateX(24px) scale(0.98);
+    filter: blur(8px);
+    transition-duration: 180ms;
+  }
+
+  /* 집중 화답: 다음 댓글 카드가 제자리에서 떠오르며 교체된다. 발행할 때마다
+     반복되는 모션이므로 아주 절제 — 6px 이동 + 페이드만, 200ms. */
+  .focus-card-enter {
+    transition:
+      transform 200ms var(--ease-out-strong),
+      opacity 200ms var(--ease-out-strong);
+    @starting-style {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Dropdown menu: scales in from its trigger (top-right anchor), never from
+     center, never from scale(0). */
+  .menu-pop {
+    transform-origin: top right;
+    transition:
+      transform 150ms var(--ease-out-strong),
+      opacity 150ms var(--ease-out-strong);
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  /* Reduced motion: keep the fades (they aid comprehension), drop movement. */
+  @media (prefers-reduced-motion: reduce) {
+    .panel-material {
+      transition: opacity 200ms ease;
+      @starting-style {
+        opacity: 0;
+        transform: none;
+        filter: none;
+      }
+    }
+    .panel-material[data-state="closing"] {
+      opacity: 0;
+      transform: none;
+      filter: none;
+    }
+    .menu-pop {
+      transition: opacity 150ms ease;
+      @starting-style {
+        opacity: 0;
+        transform: none;
+      }
+    }
+    .focus-card-enter {
+      transition: opacity 200ms ease;
+      @starting-style {
+        opacity: 0;
+        transform: none;
+      }
+    }
+    .btn-primary:active:not(:disabled),
+    .btn-secondary:active:not(:disabled),
+    .btn-ghost:active:not(:disabled),
+    .btn-accent:active:not(:disabled),
+    .seg-item:active:not(:disabled) {
+      transform: none;
+    }
+  }
+}
+
+/* --- Notes rich-text content (Evernote-style editor body) --------------- */
+.note-content:empty::before {
+  content: attr(data-placeholder);
+  color: #c9c9c9;
+  pointer-events: none;
+}
+.note-content p { margin: 0.2em 0; }
+.note-content ul { list-style: disc; padding-left: 1.4em; margin: 0.3em 0; }
+.note-content ol { list-style: decimal; padding-left: 1.6em; margin: 0.3em 0; }
+.note-content li { margin: 0.15em 0; }
+.note-content a { color: #2563eb; text-decoration: underline; }
+.note-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0.4em 0;
+}
+.note-content blockquote {
+  border-left: 3px solid rgba(10, 10, 10, 0.15);
+  padding-left: 0.8em;
+  color: #525252;
+  margin: 0.4em 0;
+}
+
+/* Checklist */
+.note-content ul.note-checklist { list-style: none; padding-left: 0; margin: 0.3em 0; }
+.note-content ul.note-checklist > li {
+  position: relative;
+  padding-left: 1.7em;
+  margin: 0.2em 0;
+}
+/* On the shared (recipient) view the whole row toggles — show it's clickable. */
+.note-content-shared ul.note-checklist > li {
+  cursor: pointer;
+  border-radius: 0.375rem;
+}
+.note-content-shared ul.note-checklist > li:hover {
+  background: rgba(10, 10, 10, 0.04);
+}
+.note-content ul.note-checklist > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 0.3em;
+  border: 1.5px solid rgba(10, 10, 10, 0.28);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85em;
+  color: #fff;
+  cursor: pointer;
+}
+.note-content ul.note-checklist > li[data-checked="true"]::before {
+  content: "✓";
+  background: #16a34a;
+  border-color: #16a34a;
+}
+.note-content ul.note-checklist > li[data-checked="true"] {
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+/* Video timecode chip — inserted from the toolbar, edited inline. Monospace so
+   00:00 stays scannable; a click target the editor treats as one unit. */
+.note-content code.note-tc {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  line-height: 1.4;
+  padding: 0.05em 0.4em;
+  margin: 0 0.15em;
+  border-radius: 0.4em;
+  background: #eef2ff;
+  color: #4338ca;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  /* The chip holds only a timecode — keep it tight: one line, sized to its
+     content, never stretched by following text. */
+  white-space: nowrap;
+  max-width: max-content;
+}
+
+/* Attached note images — click to open the markup editor */
+.note-content img.note-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0.4em 0;
+  cursor: zoom-in;
+  box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.06);
+  transition: box-shadow 0.12s;
+}
+.note-content img.note-img:hover {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+}
+
+/* ================================================================== *
+ * 일기 (diary) — Brunch-style reading body
+ * Shared by the read view (DiaryArticle) and the contentEditable editor
+ * (.diary-editable adds the typing surface bits), so what you write
+ * matches what readers see. Generous line-height + break-keep give the
+ * roomy, magazine feel of a Brunch post. Font (gothic/myeongjo) is set
+ * on the wrapper by the component.
+ * ================================================================== */
+.diary-body {
+  font-size: 17px;
+  line-height: 1.95;
+  letter-spacing: -0.003em;
+  color: #2b2b2b;
+  word-break: keep-all;
+}
+.diary-body p {
+  margin: 0 0 1.5em;
+}
+.diary-body p:last-child {
+  margin-bottom: 0;
+}
+.diary-body h1 {
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1.6em 0 0.7em;
+}
+.diary-body h2 {
+  font-size: 1.3em;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1.5em 0 0.6em;
+}
+.diary-body h3 {
+  font-size: 1.12em;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 1.4em 0 0.5em;
+}
+.diary-body blockquote {
+  margin: 1.6em 0;
+  padding: 0.1em 0 0.1em 1.1em;
+  box-shadow: inset 3px 0 0 0 rgba(10, 10, 10, 0.25);
+  color: #525252;
+  font-style: italic;
+}
+.diary-body ul,
+.diary-body ol {
+  margin: 1.2em 0;
+  padding-left: 1.4em;
+}
+.diary-body ul { list-style: disc; }
+.diary-body ol { list-style: decimal; }
+.diary-body li { margin: 0.4em 0; }
+.diary-body a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.diary-body strong,
+.diary-body b { font-weight: 700; }
+.diary-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.4em auto;
+  display: block;
+}
+.diary-body hr {
+  border: 0;
+  height: 0;
+  margin: 2.4em auto;
+  width: 40px;
+  box-shadow: 0 1px 0 0 rgba(10, 10, 10, 0.25);
+}
+
+/* Editor-only: placeholder for the empty contentEditable surface. */
+.diary-editable:empty::before {
+  content: attr(data-placeholder);
+  color: #c9c9c9;
+  pointer-events: none;
+}
+
+/* ── 인보이스 인쇄(PDF) ─────────────────────────────────────────────────
+   PDF로 저장/인쇄할 때는 인보이스 시트(.invoice-sheet)만 남기고 앱 셸
+   (사이드바·폼·목록)을 모두 숨긴다. 셸 구조를 몰라도 되도록 visibility로
+   전부 끈 뒤 시트만 다시 켜는 고전적인 인쇄 격리 방식. */
+@media print {
+  body {
+    background: #fff;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+  .invoice-sheet,
+  .invoice-sheet *,
+  .video-note-reader,
+  .video-note-reader * {
+    visibility: visible !important;
+  }
+  .invoice-sheet {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  /* 화면 전용 보조 표시는 인쇄에서 제외 */
+  .invoice-screen-only {
+    display: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+}
+
+/* ══ 콘텐츠 화면의 시각 언어 ══════════════════════════════════════
+   은환님이 고른 시안 셋을 실구현으로 옮긴 것 (2026-08-11).
+     홈    = 카드 격자        (home-8 시안 2)
+     한 건 = 한 건 카드        (pipeline-8 시안 5)
+     첨삭  = 원고 옆에 쟁점    (fast-feedback-8 시안 2 + aifeedback-5 시안 4)
+   본은 public/prototypes/merged.html. 테두리는 전부 box-shadow 로 긋는다
+   (저장소 규칙: border · divide-x · divide-y 금지).
+   ══════════════════════════════════════════════════════════════ */
+@layer components {
+  /* --- 지금 이거 하나만 — 화면에서 제일 검은 자리 하나 ------------- */
+  .only {
+    @apply flex items-start gap-3 rounded-2xl bg-neutral-900 px-4 py-3.5 text-white;
+  }
+  .only-k {
+    @apply text-[10.5px] uppercase tracking-[0.07em] text-white/50;
+  }
+  .only-v {
+    @apply mt-0.5 text-[15px] tracking-[-0.012em];
+  }
+  .only-n {
+    @apply mt-0.5 text-xs text-white/60;
+  }
+
+  /* --- 카드 격자 --------------------------------------------------- */
+  .grid6 {
+    @apply grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3;
+  }
+  .gcard {
+    @apply overflow-hidden rounded-2xl bg-white shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06)];
+  }
+  /* 경보는 한 카드에만 — 색 예산을 지킨다 */
+  .gcard-alert {
+    @apply shadow-[inset_0_0_0_1px_rgba(225,29,72,0.22)];
+  }
+  .gcard-t {
+    @apply flex items-center gap-[7px] px-3.5 pb-2.5 pt-3;
+  }
+  .gcard-count {
+    @apply ml-auto text-[11px] text-neutral-400;
+  }
+  .gitem {
+    @apply block w-full px-3.5 py-2.5 text-left shadow-[0_-1px_0_0_rgba(10,10,10,0.05)];
+  }
+  button.gitem {
+    @apply transition-colors hover:bg-neutral-950/[0.03];
+  }
+  .gline {
+    @apply flex items-start gap-2;
+  }
+  .gtext {
+    @apply min-w-0 flex-1 text-[12.5px] leading-[1.5];
+  }
+  /* 리듬 막대 — 채운 칸 / 목표 칸 */
+  .bars {
+    @apply mt-1.5 flex gap-[3px];
+  }
+  .bars i {
+    @apply block h-1 flex-1 rounded-full bg-neutral-950/[0.08];
+  }
+  .bars i.f {
+    @apply bg-neutral-700;
+  }
+
+  /* --- 사람 이니셜 --------------------------------------------------- */
+  .av {
+    @apply inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-neutral-950/[0.06] text-[10.5px] text-neutral-700;
+  }
+  .av-late {
+    @apply bg-rose-500/10 text-rose-700;
+  }
+  .av-warn {
+    @apply bg-amber-500/10 text-amber-700;
+  }
+
+  /* --- 한 건 카드 ---------------------------------------------------- */
+  .split {
+    @apply grid items-start gap-3 lg:grid-cols-[260px_1fr];
+  }
+  .picklist {
+    @apply max-h-[74vh] overflow-auto rounded-2xl bg-white p-1.5 shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06)];
+  }
+  .pick {
+    @apply block w-full rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-neutral-950/[0.03];
+  }
+  /* 선택 강조는 브랜드 보라 — 검정 테두리를 쓰지 않는다 */
+  .pick-on {
+    @apply bg-brand/10 shadow-[inset_0_0_0_1px_rgba(137,130,208,0.3)] hover:bg-brand/10;
+  }
+  .tiles {
+    @apply mt-3.5 grid gap-2 sm:grid-cols-3;
+  }
+  .tile {
+    @apply rounded-xl bg-neutral-950/[0.03] px-3 py-2.5;
+  }
+  .tile-k {
+    @apply text-[10.5px] tracking-[0.04em] text-neutral-400;
+  }
+  .tile-v {
+    @apply mt-0.5 text-[17px] font-semibold tracking-[-0.02em];
+  }
+  .tile-n {
+    @apply mt-0.5 text-[11.5px] leading-[1.5] text-neutral-500;
+  }
+
+  /* --- 단계 표 -------------------------------------------------------- */
+  .tbl {
+    @apply mt-3.5 w-full border-collapse text-[12.5px];
+  }
+  .tbl th {
+    @apply px-2 pb-1.5 text-left text-[10.5px] font-normal uppercase tracking-[0.05em] text-neutral-400;
+  }
+  .tbl td {
+    @apply p-2 align-middle shadow-[0_-1px_0_0_rgba(10,10,10,0.05)];
+  }
+  .tbl tr.mine td {
+    @apply bg-brand/[0.07];
+  }
+  .tbl tr.mine td:first-child {
+    @apply shadow-[0_-1px_0_0_rgba(10,10,10,0.05),inset_2px_0_0_0_var(--color-brand)];
+  }
+  .tbl tr.is-done td {
+    @apply text-neutral-400;
+  }
+  .node {
+    @apply flex size-4 items-center justify-center rounded-full bg-neutral-950/10;
+  }
+  .node-done { @apply bg-neutral-700; }
+  .node-now  { @apply bg-brand; }
+  .node-late { @apply bg-amber-600; }
+
+  .two {
+    @apply mt-3.5 grid gap-2.5 sm:grid-cols-2;
+  }
+  .mini {
+    @apply rounded-xl px-3 py-3 shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06)];
+  }
+  .mini h3 {
+    @apply mb-1.5 text-[11.5px] font-medium text-neutral-500;
+  }
+  .mini li {
+    @apply flex items-start gap-[7px] py-1 text-xs leading-[1.55];
+  }
+  .mini li + li {
+    @apply mt-1 pt-2 shadow-[0_-1px_0_0_rgba(10,10,10,0.05)];
+  }
+
+  /* --- 첨삭: 원고 옆에 쟁점 -------------------------------------------- */
+  .rsplit {
+    @apply grid items-start gap-3 xl:grid-cols-[1fr_384px];
+  }
+  /* 원고 본문 — 읽는 글이라 폭을 62자로 묶는다 */
+  .ms {
+    @apply max-w-[62ch] text-[14.5px] leading-[1.85] text-neutral-700;
+  }
+  .ms p {
+    @apply mb-3;
+  }
+  /* 번호가 박히는 자리. 밑줄 색이 심각도다 */
+  .mk {
+    @apply cursor-pointer rounded px-0.5 shadow-[inset_0_-2px_0_0_rgba(10,10,10,0.14)] transition-colors hover:bg-neutral-950/[0.04];
+  }
+  .mk-bad     { @apply shadow-[inset_0_-2px_0_0_rgba(225,29,72,0.45)]; }
+  .mk-warn    { @apply shadow-[inset_0_-2px_0_0_rgba(217,119,6,0.5)]; }
+  .mk-settled { @apply shadow-[inset_0_-2px_0_0_rgba(5,150,105,0.4)]; }
+  .mk-on      { @apply bg-brand/[0.16] shadow-[inset_0_0_0_1px_rgba(137,130,208,0.45)]; }
+  .pin {
+    @apply ml-1 inline-flex size-4 items-center justify-center rounded-full bg-neutral-900 align-middle text-[10px] text-white;
+  }
+
+  .issue {
+    @apply rounded-xl bg-white shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06)] transition-shadow;
+  }
+  .issue-bad  { @apply shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06),inset_3px_0_0_0_#e11d48]; }
+  .issue-warn { @apply shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06),inset_3px_0_0_0_#d97706]; }
+  .issue-on   { @apply shadow-[inset_0_0_0_2px_var(--color-brand)]; }
+  .issue-num {
+    @apply inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-neutral-950/[0.06] text-[11px] text-neutral-700;
+  }
+  .issue-what {
+    @apply mt-1 block text-[13px] font-semibold leading-[1.5] tracking-[-0.008em];
+  }
+  .basis {
+    @apply mt-2 rounded-lg bg-neutral-950/[0.03] px-2.5 py-2 text-[11.5px] leading-[1.6] text-neutral-500;
+  }
+  /* 접힘 — 높이를 재지 않고 grid-rows 로 연다 */
+  .fold {
+    @apply grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-out;
+  }
+  .fold-open {
+    @apply grid-rows-[1fr];
+  }
+  .fold > div {
+    @apply overflow-hidden;
+  }
+  .vb {
+    @apply flex-1 rounded-lg p-2 text-center text-xs shadow-[inset_0_0_0_1px_rgba(10,10,10,0.1)] transition-colors;
+  }
+  .vb-ok-on  { @apply bg-emerald-500/10 text-emerald-700 shadow-[inset_0_0_0_1px_rgba(5,150,105,0.4)]; }
+  .vb-fix-on { @apply bg-rose-500/10 text-rose-700 shadow-[inset_0_0_0_1px_rgba(225,29,72,0.35)]; }
+  /* 아래에 붙어 따라오는 마무리 줄 */
+  .ready {
+    @apply sticky bottom-3.5 mt-3 flex items-center gap-2.5 rounded-xl bg-neutral-900 px-3.5 py-3 text-white shadow-[0_12px_32px_-14px_rgba(10,10,10,0.5)];
+  }
+
+  /* --- 밤 점검 -------------------------------------------------------- */
+  .chk {
+    @apply shadow-[0_-1px_0_0_rgba(10,10,10,0.05)];
+  }
+  .chk-t {
+    @apply flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors hover:bg-neutral-950/[0.03];
+  }
+  .chk-dot {
+    @apply flex size-[18px] shrink-0 items-center justify-center rounded-full bg-neutral-950/[0.06];
+  }
+  .chk-dot-on {
+    @apply bg-emerald-600 text-white;
+  }
+  .body-text {
+    @apply max-w-[62ch] whitespace-pre-line text-[14.5px] leading-[1.85] text-neutral-700;
+  }
+  .intro-box {
+    @apply rounded-xl bg-neutral-950/[0.03] px-4 py-3 text-[14.5px] leading-[1.75];
+  }
+  .field {
+    @apply w-full rounded-lg bg-neutral-950/[0.03] px-3 py-2 text-[12.5px] shadow-[inset_0_0_0_1px_rgba(10,10,10,0.06)] outline-none focus:shadow-[inset_0_0_0_1px_rgba(10,10,10,0.16)];
+  }
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+  --surface-1: #171717;
+  --surface-2: #1E1E1E;
+  --surface-3: #252525;
+  --surface-4: #2C2C2C;
+  --surface-5: #333333;
+  --surface-6: #3A3A3A;
+  --surface-7: #414141;
+  --surface-8: #484848;
+  --dm-hi-base: rgba(255,255,255,0.01);
+  --dm-hi-mid: rgba(255,255,255,0.02);
+  --dm-hi-high: rgba(255,255,255,0.04);
+  --dm-hi-peak: rgba(255,255,255,0.06);
+  --dm-ring-base: rgba(255,255,255,0.02);
+  --dm-ring-mid: rgba(255,255,255,0.04);
+  --dm-ring-high: rgba(255,255,255,0.06);
+  --dm-drop: rgba(0,0,0,0.18);
+  --shadow-1: inset 0 0 0 1px var(--dm-ring-base);
+  --shadow-2: inset 0 1px 0 0 var(--dm-hi-base), inset 0 0 0 1px var(--dm-ring-base), 0 1px 1px -0.5px var(--dm-drop);
+  --shadow-3: inset 0 1px 0 0 var(--dm-hi-mid), inset 0 0 0 1px var(--dm-ring-base), 0 0 0 1px rgba(0,0,0,0.12), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop);
+  --shadow-4: inset 0 1px 0 0 var(--dm-hi-mid), inset 0 0 0 1px var(--dm-ring-mid), 0 0 0 1px rgba(0,0,0,0.14), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop);
+  --shadow-5: inset 0 1px 0 0 var(--dm-hi-high), inset 0 0 0 1px var(--dm-ring-mid), 0 0 0 1px rgba(0,0,0,0.16), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop);
+  --shadow-6: inset 0 1px 0 0 var(--dm-hi-high), inset 0 0 0 1px var(--dm-ring-high), 0 0 0 1px rgba(0,0,0,0.18), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop), 0 24px 24px -12px var(--dm-drop);
+  --shadow-7: inset 0 1px 0 0 var(--dm-hi-peak), inset 0 0 0 1px var(--dm-ring-high), 0 0 0 1px rgba(0,0,0,0.20), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop), 0 24px 24px -12px var(--dm-drop), 0 48px 48px -24px var(--dm-drop);
+  --shadow-8: inset 0 1px 0 0 var(--dm-hi-peak), inset 0 0 0 1px var(--dm-ring-high), 0 0 0 1px rgba(0,0,0,0.22), 0 1px 1px -0.5px var(--dm-drop), 0 3px 3px -1.5px var(--dm-drop), 0 6px 6px -3px var(--dm-drop), 0 12px 12px -6px var(--dm-drop), 0 24px 24px -12px var(--dm-drop), 0 48px 48px -24px var(--dm-drop), 0 96px 96px -48px var(--dm-drop);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+  .shimmer-text {
+    color: transparent;
+    background: linear-gradient(90deg, #a3a3a3 0%, #a3a3a3 35%, #525252 50%, #a3a3a3 65%, #a3a3a3 100%);
+    background-size: 300% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+/* cache-bust 2026-07-28: 손상 캐시로 md:flex 규칙이 유실된 브라우저를 위해 ETag 갱신 */
+
+/* 캐시 갱신용 무해 규칙 — 지워도 됨 */
+.oc-cache-bust-20260728 { --bust: 1; }
+
+@layer components {
+  /* 도식 등 가로로 넘치는 콘텐츠용 스크롤 컨테이너 — macOS의 숨김 스크롤바
+     대신 얇은 스크롤바를 항상 보여줘 "잘린 게 아니라 더 있다"를 알린다. */
+  .visual-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(10, 10, 10, 0.2) transparent;
+  }
+  .visual-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+  .visual-scroll::-webkit-scrollbar-thumb {
+    background: rgba(10, 10, 10, 0.18);
+    border-radius: 3px;
+  }
+  .visual-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* 끝을 모르는 작업용 진행 바 — 채움 비율 대신 흐르는 띠로 "일하는 중"을
+     보여준다 (영상 노트 가져오기 등 몇 분짜리 서버 작업). */
+  @keyframes progress-flow {
+    from {
+      transform: translateX(-110%);
+    }
+    to {
+      transform: translateX(360%);
+    }
+  }
+  .progress-indeterminate {
+    animation: progress-flow 1.5s ease-in-out infinite;
+  }
+}
